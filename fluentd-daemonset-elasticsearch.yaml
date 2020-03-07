@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluentd
@@ -7,6 +7,10 @@ metadata:
     k8s-app: fluentd-logging
     version: v1
 spec:
+  selector:
+    matchLabels:
+      k8s-app: fluentd-logging
+      version: v1
   template:
     metadata:
       labels:
@@ -30,6 +34,10 @@ spec:
           # ================================================================
           - name: FLUENT_ELASTICSEARCH_SSL_VERIFY
             value: "true"
+          # Option to configure elasticsearch plugin with tls
+          # ================================================================
+          - name: FLUENT_ELASTICSEARCH_SSL_VERSION
+            value: "TLSv1_2"
           # X-Pack Authentication
           # =====================
           - name: FLUENT_ELASTICSEARCH_USER
